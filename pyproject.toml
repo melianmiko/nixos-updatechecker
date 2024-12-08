@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "nixos-updatechecker"
+version = "0.1.0"
+description = ""
+authors = ["MelianMiko <support@mmk.pw>"]
+
+[tool.poetry.scripts]
+nixos-updatechecker = 'nixos_updatechecker:main'
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pygobject = "^3.50.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
