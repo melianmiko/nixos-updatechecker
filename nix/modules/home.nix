@@ -40,6 +40,11 @@ in {
       type = lib.types.str;
       default = "task-recurring";
     };
+    ignored-pkgs = lib.mkOption {
+        description = "Ignored packages";
+        type = lib.types.listOf lib.types.str;
+        default = ["source"];
+    };
   };
 
   config = lib.mkIf (cfg.enabled) {

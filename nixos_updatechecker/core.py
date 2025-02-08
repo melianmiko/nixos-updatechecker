@@ -3,27 +3,26 @@ import tempfile
 import subprocess
 import socket
 
-CONFIG_DIR = "/etc/nixos"
-IGNORED_PKGS = [
-  "source"
-]
+from nixos_updatechecker.config import APP_CONFIG
+from nixos_updatechecker.utils import get_config_dir
 
 
 def get_changes():
   with tempfile.TemporaryDirectory() as temp_path:
     # Create new flake file
+    config_dir = get_config_dir()
     new_flake = f"{temp_path}/new_flake.nix"
     subprocess.check_output([
       f"nix", "flake", "update",
       "--output-lock-file", new_flake,
-      "--flake", CONFIG_DIR
+      "--flake", config_dir
     ])
     assert os.path.isfile(new_flake)
 
     # Check is there any difference between old and new flakes
     with open(new_flake, "r") as f:
       new_flake_data = f.read()
-    with open(f"{CONFIG_DIR}/flake.lock", "r") as f:
+    with open(f"{config_dir}/flake.lock", "r") as f:
       current_flake_data = f.read()
     if new_flake_data == current_flake_data:
       return []
@@ -35,7 +34,7 @@ def get_changes():
       "--no-write-lock-file",
       "--reference-lock-file", new_flake,
       "--out-link", new_system,
-      f"{CONFIG_DIR}#nixosConfigurations.{socket.gethostname()}.config.system.build.toplevel"
+      f"{config_dir}#nixosConfigurations.{socket.gethostname()}.config.system.build.toplevel"
     ])
     assert os.path.islink(new_system)
 
@@ -48,7 +47,7 @@ def get_changes():
   for line in diff_report.split("\n"):
     if line.startswith("nixos"):
       continue
-    if line.split(": ")[0] in IGNORED_PKGS:
+    if line.split(": ")[0] in APP_CONFIG["ignored-pkgs"]:
       continue
     if line == "":
       continue

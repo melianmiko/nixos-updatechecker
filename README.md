@@ -53,6 +53,19 @@ And in your Home manager setup:
     icon-no-updates = "software-updates-inactive";
     icon-updates = "software-updates-updates";
     icon-pending = "task-recurring";
+    ignored-pkgs = [ "source" ]
   };
+}
+```
+
+To configure a custom config directory, modify your NIX_PATH in your `configuration.nix`: 
+
+```nix
+{
+  nix.nixPath = [
+    # ...
+    "nixos-config=/etc/nixos/configuration.nix"
+    # ...
+  ];
 }
 ```
