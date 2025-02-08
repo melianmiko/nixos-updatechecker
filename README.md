@@ -53,7 +53,8 @@ And in your Home manager setup:
     icon-no-updates = "software-updates-inactive";
     icon-updates = "software-updates-updates";
     icon-pending = "task-recurring";
-    ignored-pkgs = [ "source" ]
+    ignored-pkgs = [ "source" ],
+    update-command = "konsole -e bash -c \"sudo nixos-rebuild switch --flake .#{};read -p 'Press Enter to finish!' </dev/tty\"";
   };
 }
 ```

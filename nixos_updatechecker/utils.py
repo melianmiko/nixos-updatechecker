@@ -2,6 +2,9 @@ import os
 import re
 import threading
 
+from contextlib import contextmanager
+from pathlib import Path
+
 from gi.repository import GLib
 
 DEFAULT_CONFIG_DIR = "/etc/nixos/"
@@ -29,3 +32,21 @@ def get_config_dir():
       if idx < len(paths):
         config_dir = os.path.dirname(paths[idx])
     return config_dir
+
+@contextmanager
+def set_directory(path: Path):
+    """Sets the cwd within the context
+
+    Args:
+        path (Path): The path to the cwd
+
+    Yields:
+        None
+    """
+
+    origin = Path().absolute()
+    try:
+        os.chdir(path)
+        yield
+    finally:
+        os.chdir(origin)

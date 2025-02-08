@@ -1,12 +1,16 @@
 import os
 from threading import Event
+import socket
+import subprocess
+
+from pathlib import Path
 
 import gi
 
 gi.require_version('AppIndicator3', '0.1')
 
 from gi.repository import AppIndicator3, Gtk
-from nixos_updatechecker.utils import ui_func
+from nixos_updatechecker.utils import ui_func, get_config_dir, set_directory
 from nixos_updatechecker.config import APP_CONFIG
 
 
@@ -33,6 +37,11 @@ class UpdateCheckIndicator:
         self.menu_check_now.connect("activate", lambda _: self.recheck_ev.set())
         self.menu_check_now.show()
         self.menu.append(self.menu_check_now)
+
+        self.menu_update = Gtk.MenuItem(label="Update system")
+        self.menu_update.connect("activate", self._update_system)
+        self.menu_update.show()
+        self.menu.append(self.menu_update)
 
         self.menu.show()
         self.icon.set_menu(self.menu)
@@ -66,3 +75,10 @@ class UpdateCheckIndicator:
             f.write("\n".join(self.changes) + "\n")
 
         os.system(APP_CONFIG["preview-command"].replace("{}", "/tmp/updates_list_preview.txt"))
+
+    def _update_system(self, *_):
+        with set_directory(Path(get_config_dir())):
+            subprocess.check_output(["nix", "flake", "update"])
+            os.system(APP_CONFIG["update-command"].replace("{}", socket.gethostname()))
+        self.changes = []
+        self.recheck_ev.set()

@@ -45,6 +45,11 @@ in {
         type = lib.types.listOf lib.types.str;
         default = ["source"];
     };
+    update-command = lib.mkOption {
+        description = "Command to update, use {} to set hostname manually (or will be autocompleted), defaults to konsole and sudo";
+        type = lib.types.str;
+        default = "konsole -e bash -c \"sudo nixos-rebuild switch --flake .#{};read -p 'Press Enter to finish!' </dev/tty\"";
+    };
   };
 
   config = lib.mkIf (cfg.enabled) {
