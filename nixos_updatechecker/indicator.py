@@ -24,7 +24,7 @@ class UpdateCheckIndicator:
             APP_CONFIG["icon-pending"],
             AppIndicator3.IndicatorCategory.APPLICATION_STATUS
         )
-        self.icon.set_status(AppIndicator3.IndicatorStatus.PASSIVE)
+        self.icon.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
 
         self.menu = Gtk.Menu()
 
