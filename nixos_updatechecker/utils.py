@@ -28,8 +28,8 @@ def get_config_dir():
     config_dir = DEFAULT_CONFIG_DIR
     if (nix_path := os.environ.get("NIX_PATH")) is not None:
       paths = re.split("=|:", nix_path)
-      idx = paths.index("nixos-config") + 1
-      if idx < len(paths):
+      if "nixos-config" in paths:
+        idx = paths.index("nixos-config") + 1
         config_dir = os.path.dirname(paths[idx])
     return config_dir
 
