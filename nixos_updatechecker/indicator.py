@@ -7,9 +7,9 @@ from pathlib import Path
 
 import gi
 
-gi.require_version('AppIndicator3', '0.1')
+gi.require_version('AyatanaAppIndicator3', '0.1')
 
-from gi.repository import AppIndicator3, Gtk
+from gi.repository import AyatanaAppIndicator3 as AppIndicator3, Gtk
 from nixos_updatechecker.utils import ui_func, get_config_dir, set_directory
 from nixos_updatechecker.config import APP_CONFIG
 

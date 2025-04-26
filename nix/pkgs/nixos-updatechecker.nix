@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication {
     gobject-introspection
   ];
   buildInputs = with pkgs; [
-    libappindicator
+    libayatana-appindicator
   ];
   propagatedBuildInputs = with python3Packages; [
     pygobject3
