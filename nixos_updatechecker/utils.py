@@ -1,4 +1,5 @@
 import os
+import json
 import re
 import threading
 
@@ -38,6 +39,11 @@ def get_config_dir():
         config_dir = os.path.dirname(paths[idx])
 
     return config_dir
+
+
+def get_locks(payload):
+    return json.dumps(json.loads(payload)["locks"])
+
 
 @contextmanager
 def set_directory(path: Path):

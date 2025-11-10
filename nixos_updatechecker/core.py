@@ -4,7 +4,7 @@ import subprocess
 import socket
 
 from nixos_updatechecker.config import APP_CONFIG
-from nixos_updatechecker.utils import get_config_dir
+from nixos_updatechecker.utils import get_config_dir, get_locks
 
 
 def get_changes():
@@ -20,11 +20,18 @@ def get_changes():
     assert os.path.isfile(new_flake)
 
     # Check is there any difference between old and new flakes
-    with open(new_flake, "r") as f:
-      new_flake_data = f.read()
-    with open(f"{config_dir}/flake.lock", "r") as f:
-      current_flake_data = f.read()
-    if new_flake_data == current_flake_data:
+    new_lock_metadata = subprocess.check_output([
+      "nix", "flake", "metadata",
+      "--json",
+      "--reference-lock-file", new_flake,
+      config_dir,
+    ]).decode("utf-8")
+    current_lock_metadata = subprocess.check_output([
+      "nix", "flake", "metadata",
+      "--json",
+      config_dir,
+    ]).decode("utf-8")
+    if get_locks(new_lock_metadata) == get_locks(current_lock_metadata):
       return []
 
     # Create temporary system
