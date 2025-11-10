@@ -11,7 +11,7 @@ def get_changes():
   with tempfile.TemporaryDirectory() as temp_path:
     # Create new flake file
     config_dir = get_config_dir()
-    new_flake = f"{temp_path}/new_flake.nix"
+    new_flake = f"{temp_path}/new_flake.lock"
     subprocess.check_output([
       f"nix", "flake", "update",
       "--output-lock-file", new_flake,

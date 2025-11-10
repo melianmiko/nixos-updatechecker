@@ -50,6 +50,11 @@ in {
         type = lib.types.str;
         default = "konsole -e bash -c \"sudo nixos-rebuild switch --flake .#{};read -p 'Press Enter to finish!' </dev/tty\"";
     };
+    config-path = lib.mkOption {
+        description = "NixOS configuration URL, defaults to auto-detect";
+        type = lib.types.str;
+        default = "";
+    };
   };
 
   config = lib.mkIf (cfg.enabled) {
